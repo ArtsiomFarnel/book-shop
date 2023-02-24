@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +10,7 @@ import BookBlock from '../components/BookBlock';
 import Skeleton from '../components/BookBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { setFilters } from '../redux/slices/filterSlice';
+import { fetchBooks } from '../redux/slices/booksSlice';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,10 +18,8 @@ const Home = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
+  const { items, status } = useSelector((state) => state.books);
   const { categoryId, sortType, currentPage, searchValue } = useSelector((state) => state.filter);
-
-  const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (isMounted.current) {
@@ -54,21 +52,12 @@ const Home = () => {
 
   React.useEffect(() => {
     if (!isSearch.current) {
-      setIsLoading(true);
-
       const sortBy = sortType.property.replace('-', '');
       const order = sortType.property.includes('-') ? 'asc' : 'desc';
       const search = searchValue ? `${searchValue}` : '';
       const category = categoryId > 0 ? `${categoryId}` : '';
 
-      axios
-        .get(
-          `https://63ecb1a5be929df00cb0201a.mockapi.io/items?page=${currentPage}&limit=8&sortby=${sortBy}&order=${order}&category=${category}&search=${search}`
-        )
-        .then((res) => {
-          setItems(res.data);
-          setIsLoading(false);
-        });
+      dispatch(fetchBooks({ currentPage, sortBy, order, category, search }));
     }
     isSearch.current = false;
 
@@ -82,11 +71,18 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className="content__title">Все книги</h2>
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-          : items.map((obj) => <BookBlock key={obj.id} {...obj} />)}
-      </div>
+      {status === 'error' ? (
+        <div className="content__error-info">
+          <h2>Произошла ошибка на сервере 😕</h2>
+          <p>Попробуйте повторить попытку позже</p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === 'loading'
+            ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
+            : items.map((obj) => <BookBlock key={obj.id} {...obj} />)}
+        </div>
+      )}
       <Pagination />
     </div>
   );
