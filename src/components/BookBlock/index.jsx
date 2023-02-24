@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../../redux/slices/cartSlice';
 
@@ -26,8 +27,10 @@ function BookBlock({ id, title, price, imageUrl, sizes, types }) {
   return (
     <div className="book-block-wrapper">
       <div className="book-block">
-        <img className="book-block__image" src={imageUrl} alt="Pizza" />
-        <h4 className="book-block__title">{title}</h4>
+        <Link to={`/books/${id}`}>
+          <img className="book-block__image" src={imageUrl} alt="Pizza" />
+          <h4 className="book-block__title">{title}</h4>
+        </Link>
         <div className="book-block__selector">
           <ul>
             {types.map((type) => (
