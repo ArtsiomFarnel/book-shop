@@ -16,7 +16,7 @@ import { fetchBooks } from '../redux/book/slice';
 import { useAppDispatch } from '../redux/store';
 import { FilterSliceState } from '../redux/filter/types';
 
-const Home = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isSearch = React.useRef(false);
@@ -84,7 +84,7 @@ const Home = () => {
         <div className="content__items">
           {status === 'loading'
             ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-            : items.map((obj: any) => <BookBlock key={obj.id} {...obj} />)}
+            : items.map((obj) => <BookBlock key={obj.id} {...obj} />)}
         </div>
       )}
       <Pagination />

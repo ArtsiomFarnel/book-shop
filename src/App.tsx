@@ -10,7 +10,7 @@ import MainLayout from './layouts/MainLayout';
 
 //import books from './assets/books.json';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
@@ -21,6 +21,6 @@ function App() {
       </Route>
     </Routes>
   );
-}
+};
 
 export default App;

@@ -13,7 +13,7 @@ export const sortList: SortType[] = [
   { name: 'алфавиту по возрастанию', property: SortPropertyEnum.TITLE_ASC }
 ];
 
-function Sort() {
+const Sort: React.FC = () => {
   const dispatch = useDispatch();
   const { sortType } = useSelector(selectFilter);
   const sortRef = React.useRef<HTMLDivElement>(null);
@@ -63,6 +63,6 @@ function Sort() {
       )}
     </div>
   );
-}
+};
 
 export default Sort;
