@@ -30,7 +30,7 @@ const FullBook: React.FC = () => {
 
   return (
     <div className="container">
-      <img src={book.imageUrl} />
+      <img className="book-block__image" src={book.imageUrl} />
       <h2>{book.title}</h2>
       <h4>{book.price} ₽</h4>
       <Link to="/">

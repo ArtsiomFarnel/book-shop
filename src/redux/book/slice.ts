@@ -1,17 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { Book, BooksSliceState, FetchBooksParams, Status } from './types';
 
-export const fetchBooks = createAsyncThunk('books/fetchBooksStatus', async (params) => {
-  const { currentPage, sortBy, order, category, search } = params;
-  const { data } = await axios.get(
-    `https://63ecb1a5be929df00cb0201a.mockapi.io/items?page=${currentPage}&limit=8&sortby=${sortBy}&order=${order}&category=${category}&search=${search}`
-  );
-  return data;
-});
+export const fetchBooks = createAsyncThunk<Book[], FetchBooksParams>(
+  'books/fetchBooksStatus',
+  async (params) => {
+    const { currentPage, sortBy, order, category, search } = params;
+    const { data } = await axios.get<Book[]>(
+      `https://63ecb1a5be929df00cb0201a.mockapi.io/items?page=${currentPage}&limit=8&sortby=${sortBy}&order=${order}&category=${category}&search=${search}`
+    );
+    return data;
+  }
+);
 
-const initialState = {
+const initialState: BooksSliceState = {
   items: [],
-  status: 'loading' //loading | success | error
+  status: Status.LOADING //loading | success | error
 };
 
 const booksSlice = createSlice({
@@ -24,24 +28,22 @@ const booksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchBooks.pending, (state) => {
-      state.status = 'loading';
+      state.status = Status.LOADING;
       state.items = [];
       console.log('fetch books is pending...');
     });
     builder.addCase(fetchBooks.fulfilled, (state, action) => {
-      state.status = 'success';
+      state.status = Status.SUCCESS;
       state.items = action.payload;
       console.log('books are received');
     });
     builder.addCase(fetchBooks.rejected, (state) => {
-      state.status = 'error';
+      state.status = Status.ERROR;
       state.items = [];
       console.log('fetch books was rejected!');
     });
   }
 });
-
-export const selectBooks = (state) => state.books;
 
 export const { setItems } = booksSlice.actions;
 export default booksSlice.reducer;

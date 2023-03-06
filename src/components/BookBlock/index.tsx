@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, selectCartItem } from '../../redux/slices/cartSlice';
+import { selectCartItem } from '../../redux/cart/selectors';
+import { addItem } from '../../redux/cart/slice';
+import { CartItem } from '../../redux/cart/types';
 
 type BookProps = {
   id: string;
@@ -23,13 +25,14 @@ const BookBlock: React.FC<BookProps> = ({ id, title, price, imageUrl, sizes, typ
   const typeNames = ['тонкое', 'традиционное'];
 
   const onClickAdd = () => {
-    const item = {
+    const item: CartItem = {
       id,
       title,
       price,
       imageUrl,
       type: typeNames[activeType],
-      size: sizes[activeSize]
+      size: sizes[activeSize],
+      count: 0
     };
     dispatch(addItem(item));
   };

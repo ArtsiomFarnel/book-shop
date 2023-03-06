@@ -2,19 +2,23 @@ import React from 'react';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Categories from '../components/Categories';
 import Sort, { sortList } from '../components/Sort';
 import BookBlock from '../components/BookBlock';
 
 import Skeleton from '../components/BookBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { selectFilter, setFilters } from '../redux/slices/filterSlice';
-import { fetchBooks, selectBooks } from '../redux/slices/booksSlice';
+import { selectBooks } from '../redux/book/selectors';
+import { selectFilter } from '../redux/filter/selectors';
+import { setFilters } from '../redux/filter/slice';
+import { fetchBooks } from '../redux/book/slice';
+import { useAppDispatch } from '../redux/store';
+import { FilterSliceState } from '../redux/filter/types';
 
 const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
@@ -44,7 +48,7 @@ const Home = () => {
         setFilters({
           ...params,
           sortType
-        })
+        } as FilterSliceState)
       );
       isSearch.current = true;
     }
@@ -57,7 +61,6 @@ const Home = () => {
       const search = searchValue ? `${searchValue}` : '';
       const category = categoryId > 0 ? `${categoryId}` : '';
 
-      // @ts-ignore
       dispatch(fetchBooks({ currentPage, sortBy, order, category, search }));
     }
     isSearch.current = false;
