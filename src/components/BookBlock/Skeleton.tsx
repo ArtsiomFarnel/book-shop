@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-const Skeleton = () => (
+const Skeleton: React.FC = () => (
   <div className="book-block-wrapper">
     <ContentLoader
       className="book-block"

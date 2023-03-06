@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
-const FullBook = () => {
-  const [book, setBook] = useState({});
+const FullBook: React.FC = () => {
+  const [book, setBook] = React.useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
   const { id } = useParams();
   const navigate = useNavigate();
 

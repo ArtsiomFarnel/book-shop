@@ -9,8 +9,8 @@ import BookBlock from '../components/BookBlock';
 
 import Skeleton from '../components/BookBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { setFilters } from '../redux/slices/filterSlice';
-import { fetchBooks } from '../redux/slices/booksSlice';
+import { selectFilter, setFilters } from '../redux/slices/filterSlice';
+import { fetchBooks, selectBooks } from '../redux/slices/booksSlice';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,8 +18,8 @@ const Home = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const { items, status } = useSelector((state) => state.books);
-  const { categoryId, sortType, currentPage, searchValue } = useSelector((state) => state.filter);
+  const { items, status } = useSelector(selectBooks);
+  const { categoryId, sortType, currentPage, searchValue } = useSelector(selectFilter);
 
   React.useEffect(() => {
     if (isMounted.current) {
@@ -57,6 +57,7 @@ const Home = () => {
       const search = searchValue ? `${searchValue}` : '';
       const category = categoryId > 0 ? `${categoryId}` : '';
 
+      // @ts-ignore
       dispatch(fetchBooks({ currentPage, sortBy, order, category, search }));
     }
     isSearch.current = false;
@@ -80,7 +81,7 @@ const Home = () => {
         <div className="content__items">
           {status === 'loading'
             ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-            : items.map((obj) => <BookBlock key={obj.id} {...obj} />)}
+            : items.map((obj: any) => <BookBlock key={obj.id} {...obj} />)}
         </div>
       )}
       <Pagination />
