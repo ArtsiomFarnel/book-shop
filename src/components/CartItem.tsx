@@ -14,16 +14,20 @@ type CartItemProps = {
 
 const CartItem: React.FC<CartItemProps> = ({ id, title, type, price, count, imageUrl, size }) => {
   const dispatch = useDispatch();
+
   const onClickPlus = () => {
     dispatch(plusItem(id));
   };
+
   const onClickMinus = () => {
     if (count > 1) dispatch(minusItem(id));
     else dispatch(removeItem(id));
   };
+
   const onClickRemove = () => {
     if (window.confirm('Вы уверены?')) dispatch(removeItem(id));
   };
+
   return (
     <div className="cart__item">
       <div className="cart__item-img">

@@ -23,7 +23,7 @@ function Sort() {
 
   const [open, setOpen] = React.useState(false);
 
-  const onClickListItem = (obj: any) => {
+  const onClickListItem = (obj: SortType) => {
     dispatch(setSortType(obj));
     setOpen(false);
   };

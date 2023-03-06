@@ -8,17 +8,13 @@ const Categories: React.FC = () => {
   const { categoryId } = useSelector(selectFilter);
   const dispatch = useDispatch();
 
-  const onChangeCategory = (id: number) => {
-    dispatch(setCategoryId(id));
-  };
-
   return (
     <div className="categories">
       <ul>
         {categories.map((name, index) => (
           <li
             key={index}
-            onClick={() => onChangeCategory(index)}
+            onClick={() => dispatch(setCategoryId(index))}
             className={categoryId === index ? 'active' : ''}
           >
             {name}
